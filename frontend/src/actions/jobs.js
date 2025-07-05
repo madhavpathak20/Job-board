@@ -1,4 +1,4 @@
-const backendUrl = 'http://localhost:5000';
+const backendUrl = 'https://job-board-lgmm.onrender.com';
 
 export const createNewJob = async (title, location, salary, description, requirements) => {
   const response = await fetch(`${backendUrl}/jobs/newjob`, {
