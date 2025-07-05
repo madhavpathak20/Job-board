@@ -1,4 +1,4 @@
-const backendUrl = 'http://localhost:5000';
+const backendUrl = 'https://job-board-lgmm.onrender.com';
 
 export const loginApplicant = async (email, password) => {
   const response = await fetch(`${backendUrl}/auth/login-applicant`, {
