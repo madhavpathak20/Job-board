@@ -4,6 +4,8 @@ const path = require('path');
 const fetchuser = require('../middleware/middleware');
 const Application = require('../models/Application');
 const fs = require('fs');
+const axios = require('axios');
+require('dotenv').config();
 
 const router = express.Router();
 
@@ -48,10 +50,26 @@ router.post('/apply/:jobId', upload.single('resume'), fetchuser, async (req, res
       return res.status(400).json({ error: 'Resume file is required' });
     }
 
+    // Upload to Uploadcare
+    const FormData = require('form-data');
+    const form = new FormData();
+    form.append('UPLOADCARE_PUB_KEY', process.env.UPLOADCARE_PUB_KEY);
+    form.append('UPLOADCARE_STORE', '1');
+    form.append('file', fs.createReadStream(req.file.path));
+
+    const uploadcareRes = await axios.post('https://upload.uploadcare.com/base/', form, {
+      headers: form.getHeaders(),
+    });
+    const fileId = uploadcareRes.data.file;
+    const fileUrl = `https://ucarecdn.com/${fileId}/`;
+
+    // Remove local file after upload
+    fs.unlinkSync(req.file.path);
+
     const newApplication = new Application({
       applicant: req.user.id,
       job: req.params.jobId,
-      resume: req.file.path,
+      resume: fileUrl, // Store Uploadcare file URL
       sop: req.body.sop
     });
 
@@ -62,7 +80,7 @@ router.post('/apply/:jobId', upload.single('resume'), fetchuser, async (req, res
     });
 
   } catch (error) {
-    if (req.file) {
+    if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
     res.status(500).json({ error: 'Error submitting application' });

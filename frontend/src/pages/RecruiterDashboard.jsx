@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { BriefcaseIcon, UserGroupIcon, ChartBarIcon, PlusIcon, EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
@@ -45,6 +44,16 @@ export default function RecruiterDashboard() {
       )
     );
   };
+
+  const getResumeUrl = (resume) => {
+    if (!resume) return '#';
+    if (resume.startsWith('http') && resume.includes('cloudinary.com') && resume.includes('/raw/upload/') && resume.match(/\.pdf($|\?)/i)) {
+      // Insert /fl_attachment:false after /upload for inline PDF viewing
+      return resume.replace('/upload/', '/upload/fl_attachment:false/');
+    }
+    return resume.startsWith('http') ? resume : `http://localhost:5000/${resume}`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="py-10">
@@ -191,7 +200,12 @@ export default function RecruiterDashboard() {
                             </option>
                           ))}
                         </select>
-                        <a href={`http://localhost:5000/${application?.resume}`} target='_blank' className="ml-4 text-indigo-600 hover:text-indigo-900" rel="noreferrer">
+                        <a
+                          href={getResumeUrl(application?.resume)}
+                          target='_blank'
+                          className="ml-4 text-indigo-600 hover:text-indigo-900"
+                          rel="noreferrer"
+                        >
                           <EyeIcon className="h-5 w-5" aria-hidden="true" />
                         </a>
                       </div>
