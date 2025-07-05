@@ -47,10 +47,6 @@ export default function RecruiterDashboard() {
 
   const getResumeUrl = (resume) => {
     if (!resume) return '#';
-    if (resume.startsWith('http') && resume.includes('cloudinary.com') && resume.includes('/raw/upload/') && resume.match(/\.pdf($|\?)/i)) {
-      // Insert /fl_attachment:false after /upload for inline PDF viewing
-      return resume.replace('/upload/', '/upload/fl_attachment:false/');
-    }
     return resume.startsWith('http') ? resume : `http://localhost:5000/${resume}`;
   };
 
