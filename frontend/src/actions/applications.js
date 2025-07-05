@@ -1,4 +1,4 @@
-const backendUrl = 'http://localhost:5000/applications';
+const backendUrl = 'https://job-board-lgmm.onrender.com/applications';
 
 
 export const fetchMyApplications = async () => {
