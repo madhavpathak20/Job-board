@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://job-board-frontend-8vh5.onrender.com/',
   credentials: true
 }));
 app.use(bodyParser.json());
