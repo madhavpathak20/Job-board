@@ -27,6 +27,10 @@ export default function RecruiterDashboard() {
       }
     })();
   }, []);
+    // Filter out applications with missing data
+  const validApplications = recentApplications.filter(app => 
+    app && app.applicant && app.job
+  );
 
   const statusOptions = ["Applied", "Under Review", "Accepted", "Rejected"];
 
