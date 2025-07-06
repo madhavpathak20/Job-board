@@ -83,9 +83,18 @@ router.get('/applications', fetchuser, async (req, res) => {
   try {
     const applications = await Application.find({}).populate([
       { path: 'job' },
-      { path: 'applicant' }
-    ]);;
-    const myApplications = applications.filter(application => application.job.recruiter.toString() === req.user.id);
+            { path: 'applicant' }
+    ]);
+    
+    // Filter out applications with null job or applicant, then filter by recruiter
+    const validApplications = applications.filter(application => 
+      application.job && application.applicant && application.job.recruiter
+    );
+    
+    const myApplications = validApplications.filter(application => 
+      application.job.recruiter.toString() === req.user.id
+    );
+    
     res.json(myApplications);
   } catch (error) {
     console.error(error);
