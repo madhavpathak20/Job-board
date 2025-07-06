@@ -154,7 +154,7 @@ export default function RecruiterDashboard() {
                       </div>
                       <div className="ml-2 flex-shrink-0 flex">
                         <p className="text-sm text-gray-500">{
-                          recentApplications.filter(application => application.job.id === job.id).length
+                          validApplications.filter(application => application.job?.id === job.id).length
                         } applications</p>
                         <button onClick={()=>{navigate(`/job/${job._id}?viewer=recruiter`)}} className="ml-4 text-indigo-600 hover:text-indigo-900">
                           <EyeIcon className="h-5 w-5" aria-hidden="true" />
@@ -173,15 +173,15 @@ export default function RecruiterDashboard() {
             </div>
             <div className="border-t border-gray-200">
               <ul className="divide-y divide-gray-200">
-                {recentApplications.map((application, idx) => (
+                {validApplications.map((application, idx) => (
                   <li key={idx} className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {application.applicant.fullname}
+                          {application.applicant?.fullname || 'Unknown Applicant'}
                         </p>
                         <p className="ml-2 text-sm text-gray-500 truncate">
-                          applied for {application.job.title}
+                          applied for {application.job?.title || 'Unknown Job'}
                         </p>
                       </div>
                       <div className="ml-2 flex-shrink-0 flex items-center">
